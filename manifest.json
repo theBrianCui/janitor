@@ -1,0 +1,29 @@
+{
+
+  "manifest_version": 2,
+  "name": "Janitor",
+  "version": "0.0.1",
+
+  "description": "Clean up the web.",
+  "homepage_url": "https://google.com",
+  "icons": {
+    "32": "icons/beasts-32.png",
+    "48": "icons/beasts-48.png",
+    "96": "icons/beasts-96.png"
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": ["<all_urls>"],
+      "js": ["content_scripts/janitor.js"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "permissions": [
+  ],
+
+  "web_accessible_resources": [
+  ]
+
+}
