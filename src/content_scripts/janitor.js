@@ -6,7 +6,7 @@ function highlight(elements) {
     for (let i = 0; i < elements.length; ++i) {
         //let weight = (elements.length - i) * 2;
 
-        let weight = .5;
+        let weight = 0.5;
         if (elements[i])
             elements[i].style.outline = colors[i] + " solid " + weight + "rem";
     }
@@ -24,7 +24,7 @@ function unhighlight(elements) {
 
 document.addEventListener("contextmenu", (e) => {
     console.log("Context menu called from: " + e.clientX + ", " + e.clientY);
-    unhighlight(activeTargets)
+    unhighlight(activeTargets);
 
     activeTargets[0] = e.target;
     
@@ -43,6 +43,7 @@ document.addEventListener("click", (e) => {
     unhighlight(activeTargets);
 });
 
+// Listen for messages from the background script context menu
 browser.runtime.onMessage.addListener((message) => {
     console.log("New message: " + JSON.stringify(message));
 

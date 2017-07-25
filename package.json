@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jshint": "^2.9.5",
     "uglify-es": "^3.0.26"
+  },
+  "jshintConfig": {
+    "esversion": 6
   }
 }

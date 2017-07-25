@@ -7,7 +7,11 @@ icons := dist/icons/**.*
 
 .PHONY: all clean
 
-all: $(background_scripts) $(content_scripts) static
+all: jshint $(background_scripts) $(content_scripts) static
+
+jshint: src/**/*.js
+	jshint $?
+	touch jshint
 
 $(background_scripts): src/background.js
 	mkdir -p $(dir $@)
