@@ -1,7 +1,9 @@
+var colors = ["Green", "Blue", "Purple", "Orange"];
+
 for (let i = 1; i <= 4; ++i) {
     browser.contextMenus.create({
         id: "delete-" + i,
-        title: "Delete " + i,
+        title: "Delete " + colors[i - 1] + " (Depth: " + i + ")",
         contexts: ["all"]
     });
 }

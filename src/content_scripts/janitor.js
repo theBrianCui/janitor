@@ -1,4 +1,4 @@
-var colors = ["rgba(36, 240, 4, 0.65)", "rgba(4, 154, 234, 0.65)", "rgba(123, 4, 234, 0.65)", "rgba(234, 93, 4, 0.65)"];
+var colors = ["rgba(36, 240, 4, 0.7)", "rgba(4, 154, 234, 0.7)", "rgba(123, 4, 234, 0.7)", "rgba(234, 93, 4, 0.7)"];
 var activeTargets = [];
 
 function highlight(elements) {
