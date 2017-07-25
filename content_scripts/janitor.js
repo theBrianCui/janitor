@@ -1,8 +1,31 @@
-var colors = ["#66ff66", "#ff9933", "#3399ff", "#33ffff"];
+var colors = ["rgba(36, 240, 4, 0.65)", "rgba(4, 154, 234, 0.65)", "rgba(123, 4, 234, 0.65)", "rgba(234, 93, 4, 0.65)"];
 var activeTargets = [];
+
+function highlight(elements) {
+    /* Assign an outline to each target */
+    for (let i = 0; i < elements.length; ++i) {
+        //let weight = (elements.length - i) * 2;
+
+        let weight = .5;
+        if (elements[i])
+            elements[i].style.outline = colors[i] + " solid " + weight + "rem";
+    }
+}
+
+function unhighlight(elements) {
+    /* Clear the outlines */
+    for (let i = 0; i < elements.length; ++i) {
+        let weight = (elements.length - i) * 2;
+
+        if (elements[i])
+            elements[i].style.outline = "unset";
+    }
+}
 
 document.addEventListener("contextmenu", (e) => {
     console.log("Context menu called from: " + e.clientX + ", " + e.clientY);
+    unhighlight(activeTargets)
+
     activeTargets[0] = e.target;
     
     /* Save pointers to parent elements, starting with root */
@@ -13,21 +36,20 @@ document.addEventListener("contextmenu", (e) => {
         activeTargets[i] = activeTargets[i - 1].parentNode;
     }
 
-    /* Assign an outline to each target */
-    for (let i = 0; i < activeTargets.length; ++i) {
-        activeTargets[i].style.outline = colors[i] + " solid 4px";
-    }
+    highlight(activeTargets);
+});
+
+document.addEventListener("click", (e) => {
+    unhighlight(activeTargets);
 });
 
 browser.runtime.onMessage.addListener((message) => {
     console.log("New message: " + JSON.stringify(message));
 
     if (activeTargets[0]) {
-        for (let i = 0; i < activeTargets.length; ++i) {
-            activeTargets[i].style.outline = "unset";
-        }
+        unhighlight(activeTargets);
 
-        activeTargets[message.depth].remove();
+        activeTargets[message.depth - 1].remove();
         activeTargets = [];
     }
 });
