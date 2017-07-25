@@ -7,14 +7,15 @@ icons := dist/icons/**.*
 
 .PHONY: all clean
 
-all: $(content_scripts) $(background_scripts) static
+all: $(background_scripts) $(content_scripts) static
+
+$(background_scripts): src/background.js
+	mkdir -p $(dir $@)
+	uglifyjs $< --source-map --output $@
 
 $(content_scripts): $(content_scripts_src)
 	mkdir -p $(dir $@)
-	uglifyjs $(content_scripts_src) > $@
-
-$(background_scripts): src/background.js
-	uglifyjs src/background.js > $@
+	uglifyjs $(content_scripts_src) --source-map --output $@
 
 static: $(icons) dist/manifest.json
 
