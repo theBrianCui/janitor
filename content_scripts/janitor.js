@@ -1,29 +1,33 @@
 var colors = ["#66ff66", "#ff9933", "#3399ff", "#33ffff"];
-var activeTarget = null;
+var activeTargets = [];
 
 document.addEventListener("contextmenu", (e) => {
     console.log("Context menu called from: " + e.clientX + ", " + e.clientY);
-    activeTarget = e.target;
+    activeTargets[0] = e.target;
+    
+    /* Save pointers to parent elements, starting with root */
+    for (let i = 1; i < colors.length; ++i) {
+        if (activeTargets[i - 1].parentNode == null)
+            break;
 
-    let node = activeTarget;
-    let i = 0;
-    do {
-        node.style.outline = colors[i] + " solid 4px";
-    } while ((node = node.parentNode) && i++ < colors.length);
+        activeTargets[i] = activeTargets[i - 1].parentNode;
+    }
+
+    /* Assign an outline to each target */
+    for (let i = 0; i < activeTargets.length; ++i) {
+        activeTargets[i].style.outline = colors[i] + " solid 4px";
+    }
 });
 
 browser.runtime.onMessage.addListener((message) => {
     console.log("New message: " + JSON.stringify(message));
 
-    if (activeTarget) {
-        console.log(activeTarget);
-
-        for (let i = 0; i < message.depth; ++i) {
-            activeTarget = activeTarget.parentNode;
-            console.log(activeTarget);
+    if (activeTargets[0]) {
+        for (let i = 0; i < activeTargets.length; ++i) {
+            activeTargets[i].style.outline = "unset";
         }
 
-        activeTarget.remove();
-        activeTarget = null;
+        activeTargets[message.depth].remove();
+        activeTargets = [];
     }
 });
