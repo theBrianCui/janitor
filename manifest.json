@@ -11,6 +11,10 @@
     "48": "icons/beasts-48.png",
     "96": "icons/beasts-96.png"
   },
+
+  "background": {
+    "scripts": ["background.js"]
+  },
   "content_scripts": [
     {
       "all_frames": true,
@@ -21,6 +25,7 @@
   ],
 
   "permissions": [
+    "contextMenus"
   ],
 
   "web_accessible_resources": [

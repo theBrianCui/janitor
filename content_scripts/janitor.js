@@ -1,17 +1,29 @@
 var colors = ["#66ff66", "#ff9933", "#3399ff", "#33ffff"];
+var activeTarget = null;
 
 document.addEventListener("contextmenu", (e) => {
     console.log("Context menu called from: " + e.clientX + ", " + e.clientY);
-    var eventTarget = e.target;
+    activeTarget = e.target;
 
+    let node = activeTarget;
     let i = 0;
     do {
-        eventTarget.style.outline = colors[i++] + " solid 4px";
-    } while ((eventTarget = eventTarget.parentNode) && i < colors.length);
+        node.style.outline = colors[i] + " solid 4px";
+    } while ((node = node.parentNode) && i++ < colors.length);
+});
 
-    // var target = document.elementsFromPoint(e.clientX, e.clientY);
-    // target.forEach((node) => {
-    //     node.style.outline = "red solid 2px";
-    // });
-    //document.elementFromPoint(e.clientX, e.clientY).remove();
+browser.runtime.onMessage.addListener((message) => {
+    console.log("New message: " + JSON.stringify(message));
+
+    if (activeTarget) {
+        console.log(activeTarget);
+
+        for (let i = 0; i < message.depth; ++i) {
+            activeTarget = activeTarget.parentNode;
+            console.log(activeTarget);
+        }
+
+        activeTarget.remove();
+        activeTarget = null;
+    }
 });
