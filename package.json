@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Clean up the web.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "uglifyjs": "uglifyjs"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "uglify-es": "^3.0.26"
   }
 }
