@@ -5,6 +5,8 @@ content_scripts := dist/content_scripts/janitor.js
 background_scripts := dist/background.js
 icons := dist/icons/**.*
 
+UGLIFYFLAGS = --source-map includeSources=true,url=$(shell basename $@).map --output $@
+
 .PHONY: all clean
 
 all: jshint $(background_scripts) $(content_scripts) static
@@ -15,11 +17,11 @@ jshint: src/**/*.js
 
 $(background_scripts): src/background.js
 	mkdir -p $(dir $@)
-	uglifyjs $< --source-map includeSources=true,url=$(shell basename $@).map --output $@
+	uglifyjs $< $(UGLIFYFLAGS)
 
 $(content_scripts): $(content_scripts_src)
 	mkdir -p $(dir $@)
-	uglifyjs $(content_scripts_src) --source-map includeSources=true,url=$(shell basename $@).map --output $@
+	uglifyjs $(content_scripts_src) $(UGLIFYFLAGS)
 
 static: $(icons) dist/manifest.json
 
