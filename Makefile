@@ -1,7 +1,7 @@
 PATH  := node_modules/.bin:$(PATH)
 SHELL := /bin/bash
-content_scripts_src := src/content_scripts/*.js
-content_scripts := dist/content_scripts/janitor.js
+content_scripts_src := src/content_scripts/main.js
+content_scripts := dist/content_scripts/bundle.js
 background_scripts := dist/background.js
 icons := dist/icons/**.*
 
@@ -21,7 +21,7 @@ $(background_scripts): src/background.js
 
 $(content_scripts): $(content_scripts_src)
 	mkdir -p $(dir $@)
-	uglifyjs $(content_scripts_src) $(UGLIFYFLAGS)
+	browserify $< | uglifyjs $(UGLIFYFLAGS)
 
 static: $(icons) dist/manifest.json
 

@@ -19,7 +19,7 @@
     {
       "all_frames": true,
       "matches": ["<all_urls>"],
-      "js": ["content_scripts/janitor.js"],
+      "js": ["content_scripts/bundle.js"],
       "run_at": "document_end"
     }
   ],

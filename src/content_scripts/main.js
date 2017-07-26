@@ -1,3 +1,5 @@
+const OptimalSelect = require('optimal-select');
+
 var colors = ["rgba(36, 240, 4, 0.7)", "rgba(4, 154, 234, 0.7)", "rgba(123, 4, 234, 0.7)", "rgba(234, 93, 4, 0.7)"];
 var activeTargets = [];
 
@@ -7,18 +9,20 @@ function highlight(elements) {
         //let weight = (elements.length - i) * 2;
 
         let weight = 0.5;
-        if (elements[i])
+        if (elements[i]) {
             elements[i].style.outline = colors[i] + " solid " + weight + "rem";
+            elements[i].style.outlineOffset = (-1 * weight) + "rem";
+        }
     }
 }
 
 function unhighlight(elements) {
     /* Clear the outlines */
     for (let i = 0; i < elements.length; ++i) {
-        let weight = (elements.length - i) * 2;
-
-        if (elements[i])
+        if (elements[i]) {
             elements[i].style.outline = "unset";
+            elements[i].style.outlineOffset = "unset";
+        }
     }
 }
 
@@ -50,6 +54,7 @@ browser.runtime.onMessage.addListener((message) => {
     if (activeTargets[0]) {
         unhighlight(activeTargets);
 
+        console.log(OptimalSelect.select(activeTargets[message.depth - 1]));
         activeTargets[message.depth - 1].remove();
         activeTargets = [];
     }

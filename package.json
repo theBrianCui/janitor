@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "browserify": "^14.4.0",
     "jshint": "^2.9.5",
+    "optimal-select": "^4.0.1",
     "uglify-es": "^3.0.26"
   },
   "jshintConfig": {
