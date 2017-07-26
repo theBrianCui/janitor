@@ -4,6 +4,9 @@ var colors = ["rgba(36, 240, 4, 0.7)", "rgba(4, 154, 234, 0.7)", "rgba(123, 4, 2
 var activeTargets = [];
 
 function highlight(elements) {
+    console.log("Highlighting:");
+    console.log(elements);
+
     /* Assign an outline to each target */
     for (let i = 0; i < elements.length; ++i) {
         //let weight = (elements.length - i) * 2;
@@ -17,6 +20,9 @@ function highlight(elements) {
 }
 
 function unhighlight(elements) {
+    console.log("Unhighlighting:");
+    console.log(elements);
+
     /* Clear the outlines */
     for (let i = 0; i < elements.length; ++i) {
         if (elements[i]) {
@@ -34,7 +40,10 @@ document.addEventListener("contextmenu", (e) => {
     
     /* Save pointers to parent elements, starting with root */
     for (let i = 1; i < colors.length; ++i) {
-        if (activeTargets[i - 1].parentNode == null)
+        if (activeTargets[i - 1].parentNode == null ||
+            activeTargets[i - 1].parentNode === document.body ||
+            activeTargets[i - 1].parentNode.nodeName === "BODY" ||
+            activeTargets[i - 1].parentNode.nodeName === "HTML")
             break;
 
         activeTargets[i] = activeTargets[i - 1].parentNode;
