@@ -1,11 +1,11 @@
-Make sure you have `grunt-cli` installed:
-
-    npm install -g grunt-cli
-
-Then, install project developer dependencies:
+Make sure you have `npm` and `make` installed. Install dependencies with:
 
     npm install
 
-Finally, build with
+Build the WebExtension into `dist/` with
 
-    grunt
+    make
+
+Clean the build with
+
+    make clean

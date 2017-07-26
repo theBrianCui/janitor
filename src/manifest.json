@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Janitor",
-  "version": "0.0.1",
+  "version": "0.0.2",
 
   "description": "Clean up the web.",
   "homepage_url": "https://google.com",
@@ -15,6 +15,7 @@
   "background": {
     "scripts": ["background.js"]
   },
+  
   "content_scripts": [
     {
       "all_frames": true,
@@ -27,8 +28,4 @@
   "permissions": [
     "contextMenus"
   ],
-
-  "web_accessible_resources": [
-  ]
-
 }
