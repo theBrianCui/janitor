@@ -15,11 +15,11 @@ jshint: src/**/*.js
 
 $(background_scripts): src/background.js
 	mkdir -p $(dir $@)
-	uglifyjs $< --source-map --output $@
+	uglifyjs $< --source-map includeSources=true,url=$(shell basename $@).map --output $@
 
 $(content_scripts): $(content_scripts_src)
 	mkdir -p $(dir $@)
-	uglifyjs $(content_scripts_src) --source-map --output $@
+	uglifyjs $(content_scripts_src) --source-map includeSources=true,url=$(shell basename $@).map --output $@
 
 static: $(icons) dist/manifest.json
 
@@ -31,3 +31,4 @@ dist/manifest.json: src/manifest.json
 	
 clean:
 	rm -rf dist
+	rm jshint
