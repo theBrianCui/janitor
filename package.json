@@ -9,6 +9,8 @@
   "license": "ISC",
   "devDependencies": {
     "browserify": "^14.4.0",
+    "clean-css-cli": "^4.1.6",
+    "html-minifier": "^3.5.3",
     "jshint": "^2.9.5",
     "optimal-select": "^4.0.1",
     "uglify-es": "^3.0.26"

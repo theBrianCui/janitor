@@ -8,12 +8,20 @@ for (let i = 1; i <= 4; ++i) {
     });
 }
 
+/* Send a message to the content script with the depth.
+   The received message is a CSS selector for the element. */
 browser.contextMenus.onClicked.addListener((info, tab) => {
     browser.tabs.query({ active: true, currentWindow: true })
         .then((tabs) => {
-            browser.tabs.sendMessage(tabs[0].id, 
+            return browser.tabs.sendMessage(tabs[0].id, 
             {
                 depth: parseInt(info.menuItemId.split("-")[1])
             });
-        });
+        }).then((response) => {
+            if (response) {
+                browser.storage.local.set({
+                    query: response
+                });
+            }
+        }).then((null, console.error));
 });

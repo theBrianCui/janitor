@@ -57,14 +57,17 @@ document.addEventListener("click", (e) => {
 });
 
 // Listen for messages from the background script context menu
-browser.runtime.onMessage.addListener((message) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log("New message: " + JSON.stringify(message));
+    let response = null;
 
     if (activeTargets[0]) {
         unhighlight(activeTargets);
 
-        console.log(OptimalSelect.select(activeTargets[message.depth - 1]));
+        response = OptimalSelect.select(activeTargets[message.depth - 1]);
         activeTargets[message.depth - 1].remove();
         activeTargets = [];
     }
+
+    sendResponse(response);
 });
