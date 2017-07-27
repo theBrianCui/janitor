@@ -40,5 +40,11 @@
     "storage",
     "tabs",
     "<all_urls>"
-  ]
+  ],
+
+  "applications": {
+    "gecko": {
+      "id": "janitor@thebriancui.github.io"
+    }
+  }
 }
