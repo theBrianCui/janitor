@@ -3,7 +3,7 @@ function assignDisplayQuery(query) {
 }
 
 window.onload = () => {
-    browser.storage.local.get("query").then((result) => { assignDisplayQuery(result.query); });
+    browser.storage.sync.get("query").then((result) => { assignDisplayQuery(result.query); });
 
     browser.storage.onChanged.addListener((changes, areaName) => {
         if (changes.query && changes.query.newValue !== undefined) {
@@ -12,7 +12,7 @@ window.onload = () => {
     });
 
     document.getElementById("reset").addEventListener("click", (e) => {
-        browser.storage.local.set({ "query": null }).then(() => {
+        browser.storage.sync.set({ "query": null }).then(() => {
             return browser.tabs.executeScript({ code: "window.location.reload();" });
         }).catch((e) => {
             console.warn(e);

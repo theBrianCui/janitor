@@ -71,3 +71,11 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     sendResponse(response);
 });
+
+// Remove elements that match the query
+browser.storage.sync.get("query").then((result) => {
+    let target = document.querySelector(result.query);
+    if (target == null) return;
+
+    target.remove();
+});
