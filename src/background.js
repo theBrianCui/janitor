@@ -18,10 +18,8 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
                 depth: parseInt(info.menuItemId.split("-")[1])
             });
         }).then((response) => {
-            if (response) {
-                browser.storage.local.set({
-                    query: response
-                });
-            }
-        }).then((null, console.error));
+            return browser.storage.local.set({
+                query: response || ""
+            });
+        }).catch(console.error);
 });
