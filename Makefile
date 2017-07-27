@@ -3,8 +3,11 @@ SHELL := /bin/bash
 SRC := src
 DIST := dist
 
-javascript_src := $(wildcard $(shell find $(SRC)/ -name '*.js'))
-javascript_dist := $(javascript_src:$(SRC)/%.js=$(DIST)/%.js)
+# run jshint on ALL javascript files, but ony build the three entrypoints
+# find -name will recursively list all files that end in *.js including those on the root
+javascript_all := $(wildcard $(shell find $(SRC)/ -name '*.js'))
+javascript_main := $(SRC)/background.js $(SRC)/content_scripts/main.js $(SRC)/popup/popup.js
+javascript_dist := $(javascript_main:$(SRC)/%.js=$(DIST)/%.js)
 
 css_src := $(wildcard $(shell find $(SRC)/ -name '*.css'))
 css_dist := $(css_src:$(SRC)/%.css=$(DIST)/%.css)
@@ -18,11 +21,14 @@ UGLIFYFLAGS = --source-map includeSources=true,url=$(shell basename $@).map --ou
 
 .PHONY: all clean
 
-all: $(javascript_dist) $(css_dist) $(html_dist) static
+all: jshint $(javascript_dist) $(css_dist) $(html_dist) static
+
+jshint: $(javascript_all)
+	jshint $?
+	touch jshint
 
 $(DIST)/%.js : $(SRC)/%.js
 	@mkdir -p $(@D)
-	jshint $<
 	browserify $< | uglifyjs $(UGLIFYFLAGS)
 
 $(DIST)/%.css : $(SRC)/%.css
@@ -36,10 +42,11 @@ $(DIST)/%.html : $(SRC)/%.html
 static: $(icons) dist/manifest.json
 
 $(icons):
-	cp -r src/icons dist/icons
+	cp -r $(SRC)/icons $(DIST)/icons
 
 $(DIST)/manifest.json: $(SRC)/manifest.json
 	cp $< $@
 	
 clean:
 	rm -rf dist
+	rm -f jshint
