@@ -1,51 +1,45 @@
 PATH  := node_modules/.bin:$(PATH)
 SHELL := /bin/bash
-content_scripts_src := src/content_scripts/main.js
-content_scripts := dist/content_scripts/bundle.js
-background_scripts := dist/background.js
+SRC := src
+DIST := dist
+
+javascript_src := $(wildcard $(shell find $(SRC)/ -name '*.js'))
+javascript_dist := $(javascript_src:$(SRC)/%.js=$(DIST)/%.js)
+
+css_src := $(wildcard $(shell find $(SRC)/ -name '*.css'))
+css_dist := $(css_src:$(SRC)/%.css=$(DIST)/%.css)
+
+html_src := $(wildcard $(shell find $(SRC)/ -name '*.html'))
+html_dist := $(html_src:$(SRC)/%.html=$(DIST)/%.html)
+
 icons := dist/icons/**.*
-popup_dir := dist/popup
 
 UGLIFYFLAGS = --source-map includeSources=true,url=$(shell basename $@).map --output $@
 
 .PHONY: all clean
 
-all: jshint $(background_scripts) $(content_scripts) popup static
+all: $(javascript_dist) $(css_dist) $(html_dist) static
 
-jshint: src/**/*.js src/*.js
-	jshint $?
-	touch jshint
-
-$(background_scripts): src/background.js
-	mkdir -p $(dir $@)
-	uglifyjs $< $(UGLIFYFLAGS)
-
-$(content_scripts): $(content_scripts_src)
-	mkdir -p $(dir $@)
+$(DIST)/%.js : $(SRC)/%.js
+	@mkdir -p $(@D)
+	jshint $<
 	browserify $< | uglifyjs $(UGLIFYFLAGS)
 
-popup: $(popup_dir) $(popup_dir)/popup.css $(popup_dir)/*.html $(popup_dir)/popup.js
-
-$(popup_dir):
-	mkdir -p $@
-
-$(popup_dir)/popup.css: src/popup/popup.css
+$(DIST)/%.css : $(SRC)/%.css
+	@mkdir -p $(@D)
 	cleancss $< -o $@
 
-$(popup_dir)/*.html: src/popup/*.html
-	html-minifier --collapse-whitespace --html5 --input-dir $(dir $<) --output-dir $(dir $@)
-
-$(popup_dir)/popup.js: src/popup/popup.js
-	uglifyjs $< $(UGLIFYFLAGS)
+$(DIST)/%.html : $(SRC)/%.html
+	@mkdir -p $(@D)
+	html-minifier --collapse-whitespace --html5 $< -o $@
 
 static: $(icons) dist/manifest.json
 
 $(icons):
 	cp -r src/icons dist/icons
 
-dist/manifest.json: src/manifest.json
+$(DIST)/manifest.json: $(SRC)/manifest.json
 	cp $< $@
 	
 clean:
 	rm -rf dist
-	rm jshint
