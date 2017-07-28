@@ -1,3 +1,5 @@
+const Storage = require('./StorageProxy.js');
+
 var colors = ["Green", "Blue", "Purple", "Orange"];
 
 for (let i = 1; i <= 4; ++i) {
@@ -16,10 +18,6 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
             return browser.tabs.sendMessage(tabs[0].id, 
             {
                 depth: parseInt(info.menuItemId.split("-")[1])
-            });
-        }).then((response) => {
-            return browser.storage.sync.set({
-                query: response || ""
             });
         }).catch(console.error);
 });

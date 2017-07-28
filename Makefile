@@ -17,7 +17,7 @@ html_dist := $(html_src:$(SRC)/%.html=$(DIST)/%.html)
 
 icons := dist/icons/**.*
 
-UGLIFYFLAGS = --source-map includeSources=true,url=$(shell basename $@).map --output $@
+UGLIFYFLAGS = --source-map includeSources=true,url=$(shell basename $@).map,content=inline --output $@
 
 .PHONY: all clean
 
@@ -29,7 +29,7 @@ jshint: $(javascript_all)
 
 $(DIST)/%.js : $(SRC)/%.js
 	@mkdir -p $(@D)
-	browserify $< | uglifyjs $(UGLIFYFLAGS)
+	browserify --debug $< | uglifyjs $(UGLIFYFLAGS)
 
 $(DIST)/%.css : $(SRC)/%.css
 	@mkdir -p $(@D)

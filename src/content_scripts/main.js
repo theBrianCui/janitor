@@ -1,4 +1,6 @@
 const OptimalSelect = require('optimal-select');
+const Storage = require('../StorageProxy.js');
+const DOMAIN = window.location.host;
 
 var colors = ["rgba(36, 240, 4, 0.7)", "rgba(4, 154, 234, 0.7)", "rgba(123, 4, 234, 0.7)", "rgba(234, 93, 4, 0.7)"];
 var activeTargets = [];
@@ -59,23 +61,22 @@ document.addEventListener("click", (e) => {
 // Listen for messages from the background script context menu
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log("New message: " + JSON.stringify(message));
-    let response = null;
+    let target;
 
-    if (activeTargets[0]) {
+    if (activeTargets[0] && (target = activeTargets[message.depth - 1])) {
         unhighlight(activeTargets);
 
-        response = OptimalSelect.select(activeTargets[message.depth - 1]);
+        Storage.addQueryForDomain(DOMAIN, OptimalSelect.select(target));
         activeTargets[message.depth - 1].remove();
         activeTargets = [];
     }
-
-    sendResponse(response);
 });
 
 // Remove elements that match the query
-browser.storage.sync.get("query").then((result) => {
-    let target = document.querySelector(result.query);
-    if (target == null) return;
-
-    target.remove();
+Storage.getQueriesForDomain(DOMAIN).then((result) => {
+    result.forEach((query) => {
+        let target = document.querySelector(query);
+        if (target == null) return;
+        target.remove();
+    });
 });
