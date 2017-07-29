@@ -1,5 +1,5 @@
 html, body {
-  width: 100px;
+  width: 400px;
 }
 
 .button {
@@ -10,18 +10,9 @@ html, body {
   cursor: pointer;
 }
 
-.beast:hover {
-  background-color: #96e9fa;
-}
-
-.beast {
- background-color: #E5F2F2;
-}
-
-.clear {
- background-color: #FBFBC9;
-}
-
-.clear:hover {
- background-color: #e83c3c;
+#queryList div {
+  margin: 2px auto;
+  padding: 4px;
+  text-align: left;
+  background-color: cyan;
 }
