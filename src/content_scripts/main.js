@@ -1,6 +1,7 @@
-const OptimalSelect = require('optimal-select');
-const Storage = require('../StorageProxy.js');
-const InjectCss = require('./CssInjector.js');
+import { OptimalSelect } from 'optimal-select';
+import Storage from '../lib/StorageProxy.js';
+import InjectCss from './CssInjector.js';
+
 const DOMAIN = window.location.host;
 
 var colors = ["rgba(36, 240, 4, 0.7)", "rgba(4, 154, 234, 0.7)", "rgba(123, 4, 234, 0.7)", "rgba(234, 93, 4, 0.7)"];

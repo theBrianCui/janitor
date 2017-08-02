@@ -4,7 +4,7 @@ function injectToHead(code) {
     document.head.appendChild(styleTag);
 }
 
-module.exports = function(code) {
+export default CssInjector = function(code) {
     if (!document.head) {
         let mutationTarget = document.querySelector('html');
         let observer = new MutationObserver((mutations) => {

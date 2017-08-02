@@ -1,7 +1,7 @@
 const DOMAIN_PREFIX = "DOMAIN:";
 const SETTINGS_PREFIX = "SETTINGS:";
 
-module.exports = {
+export default Storage = {
     // Returns an array of all the queries for a given domain.
     getQueriesForDomain: function(domain) {
         let key = DOMAIN_PREFIX + domain;

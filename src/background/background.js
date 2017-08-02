@@ -1,4 +1,4 @@
-const Storage = require('./StorageProxy.js');
+import Storage from '../lib/StorageProxy.js';
 
 var colors = ["Green", "Blue", "Purple", "Orange"];
 
