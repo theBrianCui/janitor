@@ -1,6 +1,7 @@
+declare var browser: any;
 import { OptimalSelect } from 'optimal-select';
-import Storage from '../lib/StorageProxy.js';
-import InjectCss from './CssInjector.js';
+import Storage from '../lib/StorageProxy';
+import InjectCss from './CssInjector';
 
 const DOMAIN = window.location.host;
 

@@ -1,7 +1,9 @@
+declare var browser: any;
+
 const DOMAIN_PREFIX = "DOMAIN:";
 const SETTINGS_PREFIX = "SETTINGS:";
 
-export default Storage = {
+const StorageProxy = {
     // Returns an array of all the queries for a given domain.
     getQueriesForDomain: function(domain) {
         let key = DOMAIN_PREFIX + domain;
@@ -48,3 +50,5 @@ export default Storage = {
             });
     },
 };
+
+export default StorageProxy;

@@ -1,7 +1,9 @@
-import Storage from '../lib/StorageProxy.js'
+declare var browser: any;
+import Storage from '../lib/StorageProxy';
+import Promise from 'bluebird';
 var DOMAIN = "";
 
-function assignDisplayQuery(queries) {
+function assignDisplayQuery(queries: Array<string>) {
     let queryList = document.getElementById("queryList");
     for (let i = 0; i < queries.length; ++i) {
         let div = document.createElement("div");

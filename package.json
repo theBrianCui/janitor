@@ -9,11 +9,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "awesome-typescript-loader": "^3.2.2",
+    "bluebird": "^3.5.0",
     "browserify": "^14.4.0",
     "clean-css-cli": "^4.1.6",
     "html-minifier": "^3.5.3",
     "jshint": "^2.9.5",
     "optimal-select": "^4.0.1",
+    "source-map-loader": "^0.2.1",
+    "typescript": "^2.4.2",
     "uglify-es": "^3.0.26"
   },
   "jshintConfig": {

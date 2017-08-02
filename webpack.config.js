@@ -2,9 +2,9 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        'content_scripts/bundle': path.resolve(__dirname, 'src/content_scripts/main.js'),
-        'popup/bundle': path.resolve(__dirname, 'src/popup/popup.js'),
-        'background/bundle': path.resolve(__dirname, 'src/background/background.js')
+        'content_scripts/bundle': path.resolve(__dirname, 'src/content_scripts/main.ts'),
+        'popup/bundle': path.resolve(__dirname, 'src/popup/popup.ts'),
+        'background/bundle': path.resolve(__dirname, 'src/background/background.ts')
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -19,13 +19,13 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js", ".json"]
     },
 
-    // module: {
-    //     rules: [
-    //         // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-    //         { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+    module: {
+        rules: [
+            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
-    //         // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-    //         { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
-    //     ]
-    // },
+            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+        ]
+    },
 };
