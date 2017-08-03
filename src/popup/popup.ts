@@ -1,4 +1,3 @@
-declare var browser: any;
 import Storage from '../lib/StorageProxy';
 //import Promise from 'bluebird';
 var DOMAIN = "";

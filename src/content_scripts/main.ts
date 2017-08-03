@@ -1,6 +1,4 @@
-declare var browser: any;
 import { OptimalSelect } from 'optimal-select';
-
 import Storage from '../lib/StorageProxy';
 import InjectCss from './CssInjector';
 
@@ -66,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Listen for messages from the background script context menu
-    browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
+    browser.runtime.onMessage.addListener((message: any) => {
         console.log("New message: " + JSON.stringify(message));
         let target;
 
@@ -77,6 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
             activeTargets[message.depth - 1].remove();
             activeTargets = [];
         }
+
+        return false;
     });
 
     // Remove elements that match the query

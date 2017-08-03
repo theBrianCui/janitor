@@ -1,4 +1,3 @@
-declare var browser: any;
 import Storage from '../lib/StorageProxy';
 
 var colors = ["Green", "Blue", "Purple", "Orange"];
