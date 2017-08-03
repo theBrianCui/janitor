@@ -1,4 +1,4 @@
-import { OptimalSelect } from 'optimal-select';
+import OptimalSelect from 'optimal-select';
 import Storage from '../lib/StorageProxy';
 import InjectCss from './CssInjector';
 
