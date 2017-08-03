@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bluebird": "^3.5.8",
     "awesome-typescript-loader": "^3.2.2",
     "bluebird": "^3.5.0",
     "browserify": "^14.4.0",
@@ -22,5 +23,6 @@
   },
   "jshintConfig": {
     "esversion": 6
-  }
+  },
+  "typings": "@types/optimal-select.d.ts"
 }

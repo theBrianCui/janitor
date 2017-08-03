@@ -1,10 +1,10 @@
-function injectToHead(code) {
+function injectToHead(code: string) {
     let styleTag = document.createElement("style");
     styleTag.innerHTML = code;
     document.head.appendChild(styleTag);
 }
 
-function CssInjector(code) {
+function CssInjector(code: string) {
     if (!document.head) {
         let mutationTarget = document.querySelector('html');
         let observer = new MutationObserver((mutations) => {

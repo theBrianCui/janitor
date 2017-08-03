@@ -1,7 +1,39 @@
+PATH  := node_modules/.bin:$(PATH)
 SHELL := /bin/bash
 SRC := src
 DIST := dist
 
+css_src := $(wildcard $(shell find $(SRC)/ -name '*.css'))
+css_dist := $(css_src:$(SRC)/%.css=$(DIST)/%.css)
+
+html_src := $(wildcard $(shell find $(SRC)/ -name '*.html'))
+html_dist := $(html_src:$(SRC)/%.html=$(DIST)/%.html)
+
+icons := dist/icons/**.*
+
+.PHONY: all clean
+
+all: $(css_dist) $(html_dist) static
+	webpack
+
+$(DIST)/%.css : $(SRC)/%.css
+	@mkdir -p $(@D)
+	cleancss $< -o $@
+
+$(DIST)/%.html : $(SRC)/%.html
+	@mkdir -p $(@D)
+	html-minifier --collapse-whitespace --html5 $< -o $@
+
+static: $(icons) dist/manifest.json
+
+$(icons):
+	cp -r $(SRC)/icons $(DIST)/icons
+
+$(DIST)/manifest.json: $(SRC)/manifest.json
+	cp $< $@
+	
+clean:
+	rm -rf dist
 
 
 # PATH  := node_modules/.bin:$(PATH)

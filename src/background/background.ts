@@ -13,9 +13,9 @@ for (let i = 1; i <= 4; ++i) {
 
 /* Send a message to the content script with the depth.
    The received message is a CSS selector for the element. */
-browser.contextMenus.onClicked.addListener((info, tab) => {
+browser.contextMenus.onClicked.addListener((info: any, tab: any) => {
     browser.tabs.query({ active: true, currentWindow: true })
-        .then((tabs) => {
+        .then((tabs: Array<any>) => {
             return browser.tabs.sendMessage(tabs[0].id, 
             {
                 depth: parseInt(info.menuItemId.split("-")[1])

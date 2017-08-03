@@ -1,6 +1,6 @@
 declare var browser: any;
 import Storage from '../lib/StorageProxy';
-import Promise from 'bluebird';
+//import Promise from 'bluebird';
 var DOMAIN = "";
 
 function assignDisplayQuery(queries: Array<string>) {
@@ -15,7 +15,7 @@ function assignDisplayQuery(queries: Array<string>) {
 function getPageDomain() {
     if (DOMAIN) return Promise.resolve(DOMAIN);
 
-    return browser.tabs.executeScript({ code: "window.location.host"}).then((result) => {
+    return browser.tabs.executeScript({ code: "window.location.host"}).then((result: string) => {
         return (DOMAIN = result);
     });
 }
@@ -24,7 +24,7 @@ window.onload = () => {
     console.log("Popup loaded!");
 
     getPageDomain().then(Storage.getQueriesForDomain)
-        .then((queries) => {
+        .then((queries: Array<string>) => {
             assignDisplayQuery(queries); 
         });
 
@@ -35,14 +35,14 @@ window.onload = () => {
     // });
 
     document.getElementById("reset").addEventListener("click", (e) => {
-        getPageDomain().then((domain) => {
+        getPageDomain().then((domain: string) => {
             return Storage.setQueriesForDomain(domain, []);
-        }).then((newQueries) => {
+        }).then((newQueries: Array<string>) => {
             if (newQueries.length > 0)
                 throw new Error("Failed to reset queries!");
 
             return browser.tabs.executeScript({ code: "window.location.reload();" });
-        }).catch((e) => {
+        }).catch((e: Error) => {
             console.warn(e);
         }).then(() => {
             console.log("Reset!");

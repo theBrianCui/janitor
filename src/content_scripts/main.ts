@@ -1,14 +1,15 @@
 declare var browser: any;
 import { OptimalSelect } from 'optimal-select';
+
 import Storage from '../lib/StorageProxy';
 import InjectCss from './CssInjector';
 
 const DOMAIN = window.location.host;
 
 var colors = ["rgba(36, 240, 4, 0.7)", "rgba(4, 154, 234, 0.7)", "rgba(123, 4, 234, 0.7)", "rgba(234, 93, 4, 0.7)"];
-var activeTargets = [];
+var activeTargets: Array<HTMLElement> = [];
 
-function highlight(elements) {
+function highlight(elements: Array<HTMLElement>) {
     console.log("Highlighting:");
     console.log(elements);
 
@@ -24,7 +25,7 @@ function highlight(elements) {
     }
 }
 
-function unhighlight(elements) {
+function unhighlight(elements: Array<HTMLElement>) {
     console.log("Unhighlighting:");
     console.log(elements);
 
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Context menu called from: " + e.clientX + ", " + e.clientY);
         unhighlight(activeTargets);
 
-        activeTargets[0] = e.target;
+        activeTargets[0] = e.target as HTMLElement;
         
         /* Save pointers to parent elements, starting with root */
         for (let i = 1; i < colors.length; ++i) {
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 activeTargets[i - 1].parentNode.nodeName === "HTML")
                 break;
 
-            activeTargets[i] = activeTargets[i - 1].parentNode;
+            activeTargets[i] = activeTargets[i - 1].parentNode as HTMLElement;
         }
 
         highlight(activeTargets);
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Listen for messages from the background script context menu
-    browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
         console.log("New message: " + JSON.stringify(message));
         let target;
 
@@ -79,8 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Remove elements that match the query
-    Storage.getQueriesForDomain(DOMAIN).then((queries) => {
-        queries.forEach((query) => {
+    Storage.getQueriesForDomain(DOMAIN).then((queries: Array<string>) => {
+        queries.forEach((query: string) => {
             let target = document.querySelector(query);
             if (target == null) return;
             target.remove();
@@ -88,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-Storage.getQueriesForDomain(DOMAIN).then((queries) => {
+Storage.getQueriesForDomain(DOMAIN).then((queries: Array<string>) => {
     let css = "";
     for (let i = 0; i < queries.length; ++i) {
         css += "" + queries[i] + " { display: none !important; }\n";
