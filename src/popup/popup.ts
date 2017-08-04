@@ -5,12 +5,6 @@ popup while the user navigates in their browser.
 */
 import Storage from '../lib/StorageProxy';
 
-interface IState {
-    activeDomain: string,
-    activeQueries: Array<string>,
-    customQueries: Array<string>
-}
-
 var LocalState: IState = {
     activeDomain: "",
     activeQueries: [],
@@ -19,8 +13,6 @@ var LocalState: IState = {
 
 namespace Init {
     function loadPageDomain() {
-        if (!LocalState.activeDomain) return Promise.resolve(LocalState.activeDomain);
-
         return browser.tabs.executeScript({ code: "window.location.host"}).then((result: string) => {
             return (LocalState.activeDomain = result);
         });
@@ -40,20 +32,22 @@ namespace Init {
 }
 
 namespace Display {
-    export function refresh() {
+    export function Refresh() {
         let queryList = document.getElementById("queryList");
+        queryList.innerHTML = "";
 
         for (let i = 0; i < LocalState.activeQueries.length; ++i) {
-            let div = document.createElement("div");
-            div.textContent = LocalState.activeQueries[i];
-            queryList.appendChild(div);
+            let input = document.createElement("input");
+            input.setAttribute("type", "text");
+            input.setAttribute("value", LocalState.activeQueries[i]);
+            queryList.appendChild(input);
         }
     }
 }
 
 window.onload = () => {
     Init.Initialize().then(() => {
-        Display.refresh();
+        Display.Refresh();
 
         document.getElementById("reset").addEventListener("click", (e) => {
             Storage.setQueriesForDomain(LocalState.activeDomain, []).then(
@@ -62,10 +56,10 @@ window.onload = () => {
                     throw new Error("Failed to reset queries!");
 
                 return browser.tabs.executeScript({ code: "window.location.reload();" });
-            }).catch((e: Error) => {
-                console.warn(e);
-            }).then(Init.Initialize);
+            }).then(Init.Initialize).then(Display.Refresh);
         });
+    }).catch(e => {
+        console.error(e);
     });
 
     // browser.storage.onChanged.addListener((changes, areaName) => {
