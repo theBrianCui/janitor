@@ -5,7 +5,7 @@
   "version": "0.0.2",
 
   "description": "Clean up the web.",
-  "homepage_url": "https://google.com",
+  "homepage_url": "https://github.com/theBrianCui/janitor",
   "icons": {
     "32": "icons/beasts-32.png",
     "48": "icons/beasts-48.png",

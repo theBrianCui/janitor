@@ -32,8 +32,29 @@ namespace Init {
 }
 
 namespace Display {
-    export function Refresh() {
-        let queryList = document.getElementById("queryList");
+    let domain: HTMLElement;
+    let queryList: HTMLElement;
+    let resetButton: HTMLElement;
+
+    export function Load() {
+        domain = document.getElementById("domain");
+        queryList = document.getElementById("queryList");
+        resetButton = document.getElementById("reset");
+
+        domain.textContent = LocalState.activeDomain;
+
+        resetButton.addEventListener("click", e => {
+            Storage.setQueriesForDomain(LocalState.activeDomain, []).then(
+            (newQueries: Array<string>) => {
+                if (newQueries.length > 0)
+                    throw new Error("Failed to reset queries!");
+
+                return browser.tabs.executeScript({ code: "window.location.reload();" });
+            }).then(Init.Initialize).then(Display.HardRefresh);
+        });
+    }
+
+    export function HardRefresh() {
         queryList.innerHTML = "";
 
         for (let i = 0; i < LocalState.activeQueries.length; ++i) {
@@ -42,22 +63,15 @@ namespace Display {
             input.setAttribute("value", LocalState.activeQueries[i]);
             queryList.appendChild(input);
         }
+
+        (<HTMLInputElement> resetButton).disabled = LocalState.activeQueries.length === 0; 
     }
 }
 
 window.onload = () => {
     Init.Initialize().then(() => {
-        Display.Refresh();
-
-        document.getElementById("reset").addEventListener("click", (e) => {
-            Storage.setQueriesForDomain(LocalState.activeDomain, []).then(
-            (newQueries: Array<string>) => {
-                if (newQueries.length > 0)
-                    throw new Error("Failed to reset queries!");
-
-                return browser.tabs.executeScript({ code: "window.location.reload();" });
-            }).then(Init.Initialize).then(Display.Refresh);
-        });
+        Display.Load();
+        Display.HardRefresh();
     }).catch(e => {
         console.error(e);
     });

@@ -4,7 +4,7 @@ import InjectCss from './CssInjector';
 
 const DOMAIN = window.location.host;
 
-var colors = ["rgba(36, 240, 4, 0.7)", "rgba(4, 154, 234, 0.7)", "rgba(123, 4, 234, 0.7)", "rgba(234, 93, 4, 0.7)"];
+var colors: Array<string> = ["rgba(36, 240, 4, 0.7)", "rgba(4, 154, 234, 0.7)", "rgba(123, 4, 234, 0.7)", "rgba(234, 93, 4, 0.7)"];
 var activeTargets: Array<HTMLElement> = [];
 
 function highlight(elements: Array<HTMLElement>) {
