@@ -32,13 +32,13 @@ namespace Init {
 }
 
 namespace Display {
-    let domain: HTMLElement;
-    let queryList: HTMLElement;
-    let resetButton: HTMLElement;
+    let domain: Element;
+    let queryList: Element;
+    let resetButton: Element;
 
     export function Load() {
         domain = document.getElementById("domain");
-        queryList = document.getElementById("queryList");
+        queryList = document.getElementsByClassName("queryList")[0];
         resetButton = document.getElementById("reset");
 
         domain.textContent = LocalState.activeDomain;
@@ -61,7 +61,15 @@ namespace Display {
             let input = document.createElement("input");
             input.setAttribute("type", "text");
             input.setAttribute("value", LocalState.activeQueries[i]);
-            queryList.appendChild(input);
+
+            let save = document.createElement("span");
+            save.textContent = "save";
+
+            let wrapper = document.createElement("div");
+            wrapper.appendChild(input);
+            wrapper.appendChild(save);
+
+            queryList.appendChild(wrapper);
         }
 
         (<HTMLInputElement> resetButton).disabled = LocalState.activeQueries.length === 0; 
