@@ -57,18 +57,17 @@ icons := dist/icons/**.*
 
 UGLIFYFLAGS = --source-map includeSources=true,url=$(shell basename $@).map,content=inline --output $@
 
-.PHONY: all clean
+.PHONY: all static clean
 
-all: jshint $(javascript_dist) $(css_dist) $(html_dist) static
+all: static $(javascript_dist) $(css_dist) $(html_dist) 
 
-jshint: $(javascript_all)
-	jshint $?
-	touch jshint
+# jshint: $(javascript_all)
+# 	jshint $?
+# 	touch jshint
 
 $(DIST)/%.js : $(SRC)/%.ts
 	@mkdir -p $(@D)
 	rollup -i $< -c rollup.config.js -o $@
-#browserify --debug $< | uglifyjs $(UGLIFYFLAGS)
 
 $(DIST)/%.css : $(SRC)/%.css
 	@mkdir -p $(@D)
@@ -78,14 +77,11 @@ $(DIST)/%.html : $(SRC)/%.html
 	@mkdir -p $(@D)
 	html-minifier --collapse-whitespace --html5 $< -o $@
 
-static: $(icons) dist/manifest.json
+static:
+	@mkdir -p $(DIST)/static
+	cp $(SRC)/manifest.json $(DIST)
+	cp -r $(SRC)/static $(DIST)
 
-$(icons):
-	cp -r $(SRC)/icons $(DIST)/icons
-
-$(DIST)/manifest.json: $(SRC)/manifest.json
-	cp $< $@
-	
 clean:
 	rm -rf dist
 	rm -f jshint

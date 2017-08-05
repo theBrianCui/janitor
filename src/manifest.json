@@ -7,9 +7,9 @@
   "description": "Clean up the web.",
   "homepage_url": "https://github.com/theBrianCui/janitor",
   "icons": {
-    "32": "icons/beasts-32.png",
-    "48": "icons/beasts-48.png",
-    "96": "icons/beasts-96.png"
+    "32": "static/icons/beasts-32.png",
+    "48": "static/icons/beasts-48.png",
+    "96": "static/icons/beasts-96.png"
   },
 
   "background": {
@@ -18,9 +18,9 @@
 
   "browser_action": {
     "default_icon": {
-      "32": "icons/beasts-32.png",
-      "48": "icons/beasts-48.png",
-      "96": "icons/beasts-96.png"
+      "32": "static/icons/beasts-32.png",
+      "48": "static/icons/beasts-48.png",
+      "96": "static/icons/beasts-96.png"
     },
     "default_title": "Janitor",
     "default_popup": "popup/popup.html"

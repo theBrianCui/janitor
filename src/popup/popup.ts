@@ -62,8 +62,8 @@ namespace Display {
             input.setAttribute("type", "text");
             input.setAttribute("value", LocalState.activeQueries[i]);
 
-            let save = document.createElement("span");
-            save.textContent = "save";
+            let save = document.createElement("i");
+            save.setAttribute("class", "fa fa-floppy-o fa-fw");
 
             let wrapper = document.createElement("div");
             wrapper.appendChild(input);
