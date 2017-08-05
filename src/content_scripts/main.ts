@@ -1,4 +1,4 @@
-const OptimalSelect = require('optimal-select');
+import { select as OptimalSelect } from 'optimal-select';
 import Storage from '../lib/StorageProxy';
 import InjectCss from './CssInjector';
 
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (activeTargets[0] && (target = activeTargets[message.depth - 1])) {
             unhighlight(activeTargets);
 
-            Storage.addQueryForDomain(DOMAIN, OptimalSelect.select(target));
+            Storage.addQueryForDomain(DOMAIN, OptimalSelect(target));
             activeTargets[message.depth - 1].remove();
             activeTargets = [];
         }

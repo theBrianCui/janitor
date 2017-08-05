@@ -13,7 +13,7 @@
   },
 
   "background": {
-    "scripts": ["background/bundle.js"]
+    "scripts": ["background/background.js"]
   },
 
   "browser_action": {
@@ -30,7 +30,7 @@
     {
       "all_frames": true,
       "matches": ["<all_urls>"],
-      "js": ["content_scripts/bundle.js"],
+      "js": ["content_scripts/main.js"],
       "run_at": "document_start"
     }
   ],
