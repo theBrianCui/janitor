@@ -7,6 +7,14 @@ html, body {
   padding: 0;
 }
 
+#header {
+  background-color: #424242;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #f0f0f0;
+}
+
+
 div {
   text-align: center;
 }
@@ -36,16 +44,14 @@ div.queryList i {
   font-size: 1.25rem;
 }
 
-#header {
-  background-color: #424242;
-  font-weight: bold;
-  color: #f0f0f0;
-}
-
 .button {
   margin: 3% auto;
   padding: 4px;
   text-align: center;
   font-size: 1.5em;
+  cursor: pointer;
+}
+
+.clickable {
   cursor: pointer;
 }

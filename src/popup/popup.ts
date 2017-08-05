@@ -11,6 +11,17 @@ var LocalState: IState = {
     customQueries: []
 }
 
+// Helper namespace for commonly used DOM API functions.
+// namespace Doc {
+//     export function create(type: string) {
+//         return document.createElement(type);
+//     }
+
+//     export function getById(id: string) {
+//         return document.getElementById(id);
+//     }
+// }
+
 namespace Init {
     function loadPageDomain() {
         return browser.tabs.executeScript({ code: "window.location.host"}).then((result: string) => {
@@ -20,8 +31,10 @@ namespace Init {
 
     function loadActiveQueries() {
         return Storage.getQueriesForDomain(LocalState.activeDomain).then((queries: Array<string>) => {
-            LocalState.activeQueries = queries;
-            LocalState.customQueries = queries;
+            // activeQueries and customQueries to be copies of the same array, 
+            // or else modifying one will modify the other
+            LocalState.activeQueries = queries.slice();
+            LocalState.customQueries = queries.slice();
         });
     }
 
@@ -63,10 +76,33 @@ namespace Display {
             input.setAttribute("value", LocalState.activeQueries[i]);
 
             let save = document.createElement("i");
-            save.setAttribute("class", "fa fa-floppy-o fa-fw");
+            save.setAttribute("class", "fa fa-floppy-o fa-fw clickable");
 
             let trash = document.createElement("i");
-            trash.setAttribute("class", "fa fa-trash-o fa-fw");
+            trash.setAttribute("class", "fa fa-trash-o fa-fw clickable");
+
+            input.addEventListener("input", (e) => {
+                LocalState.customQueries[i] = (<HTMLInputElement> e.target).value;
+                if (LocalState.activeQueries[i] !== LocalState.customQueries[i]) {
+                    trash.classList.remove("fa-trash-o");
+                    trash.classList.add("fa-undo");
+                } else {
+                    trash.classList.remove("fa-undo");
+                    trash.classList.add("fa-trash-o");
+                }
+            });
+
+            save.addEventListener("click", (e) => {
+                let newQueries = LocalState.activeQueries;
+                newQueries[i] = LocalState.customQueries[i];
+
+                Storage.setQueriesForDomain(LocalState.activeDomain, newQueries)
+                    .then((newQueries: Array<string>) => {
+                        LocalState.activeQueries = newQueries;
+                        input.dispatchEvent(new Event("input"));
+                });
+            });
+
 
             let wrapper = document.createElement("div");
             wrapper.appendChild(input);
