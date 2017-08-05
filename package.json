@@ -12,8 +12,6 @@
     "@types/bluebird": "^3.5.8",
     "@types/node": "^8.0.19",
     "awesome-typescript-loader": "^3.2.2",
-    "bluebird": "^3.5.0",
-    "browserify": "^14.4.0",
     "clean-css-cli": "^4.1.6",
     "html-minifier": "^3.5.3",
     "jshint": "^2.9.5",
