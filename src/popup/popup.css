@@ -5,6 +5,7 @@ html, body {
   font-size: 14px;
   margin: 0;
   padding: 0;
+  text-align: center;
 }
 
 #header {
@@ -14,9 +15,11 @@ html, body {
   color: #f0f0f0;
 }
 
-
-div {
-  text-align: center;
+#domain {
+  background-color: #de3023;
+  display: inline-block;
+  color: #f0f0f0;
+  margin: 0 auto;
 }
 
 div.textGroup {
