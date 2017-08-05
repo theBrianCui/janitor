@@ -32,6 +32,10 @@ div.queryList input[type=text] {
   flex-grow: 1;
 }
 
+div.queryList i {
+  font-size: 1.25rem;
+}
+
 #header {
   background-color: #424242;
   font-weight: bold;

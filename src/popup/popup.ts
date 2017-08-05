@@ -65,9 +65,13 @@ namespace Display {
             let save = document.createElement("i");
             save.setAttribute("class", "fa fa-floppy-o fa-fw");
 
+            let trash = document.createElement("i");
+            trash.setAttribute("class", "fa fa-trash-o fa-fw");
+
             let wrapper = document.createElement("div");
             wrapper.appendChild(input);
             wrapper.appendChild(save);
+            wrapper.appendChild(trash);
 
             queryList.appendChild(wrapper);
         }
