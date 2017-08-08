@@ -50,7 +50,7 @@ namespace Display {
     let resetButton: Element;
 
     export function Load() {
-        domain = document.getElementById("domain");
+        domain = document.getElementsByClassName("domain")[0];
         queryList = document.getElementsByClassName("queryList")[0];
         resetButton = document.getElementById("reset");
 
