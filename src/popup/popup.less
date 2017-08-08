@@ -1,40 +1,50 @@
+@dark-grey: #424242;
+@pale-white: #f0f0f0;
+@outer-padding: 12px;
+
 html, body {
   width: 400px;
   font-family: Arial,Helvetica Neue,Helvetica,sans-serif; 
-  color: #424242;
+  color: @dark-grey;
   font-size: 16px; 
   margin: 0;
   padding: 0;
-  text-align: center;
+}
+
+.outer-padding {
+  padding-left: @outer-padding;
+  padding-right: @outer-padding;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 #header {
-  background-color: #424242;
+  background-color: @dark-grey;
   font-weight: bold;
   font-size: 20px;
-  padding: 4px 12px;
-  color: #f0f0f0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  .outer-padding;
+  margin-bottom: @outer-padding - 2px;
+  color: @pale-white;
 }
 
 #content {
-  padding: 12px;
+  .outer-padding;
 }
 
 #domain {
   background-color: #de3023;
   display: inline-block;
-  color: #f0f0f0;
+  color: @pale-white;
   margin: 0 auto;
-}
-
-div.textGroup {
-  margin: .2em 0;
-  text-align: left;
 }
 
 div.queryList div {
   background-color: #d1d1d1;
-  border-bottom: 1px solid #424242;
+  border-bottom: 1px solid @dark-grey;
   padding: 2px;
   display: flex;
   flex-direction: row;
@@ -56,9 +66,5 @@ div.queryList input[type=text] {
   padding: 4px;
   text-align: center;
   font-size: 1.5em;
-  cursor: pointer;
-}
-
-.clickable {
   cursor: pointer;
 }
