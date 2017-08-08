@@ -47,8 +47,8 @@ javascript_all := $(wildcard $(shell find $(SRC)/ -name '*.js'))
 javascript_main := $(SRC)/background/background.js $(SRC)/content_scripts/main.js $(SRC)/popup/popup.js
 javascript_dist := $(javascript_main:$(SRC)/%.js=$(DIST)/%.js)
 
-css_src := $(wildcard $(shell find $(SRC)/ -name '*.css'))
-css_dist := $(css_src:$(SRC)/%.css=$(DIST)/%.css)
+css_src := $(wildcard $(shell find $(SRC)/ -name '*.less'))
+css_dist := $(css_src:$(SRC)/%.less=$(DIST)/%.css)
 
 html_src := $(wildcard $(shell find $(SRC)/ -name '*.html'))
 html_dist := $(html_src:$(SRC)/%.html=$(DIST)/%.html)
@@ -69,9 +69,9 @@ $(DIST)/%.js : $(SRC)/%.ts
 	@mkdir -p $(@D)
 	rollup -i $< -c rollup.config.js -o $@
 
-$(DIST)/%.css : $(SRC)/%.css
+$(DIST)/%.css : $(SRC)/%.less
 	@mkdir -p $(@D)
-	cleancss $< -o $@
+	lessc $< | cleancss -o $@
 
 $(DIST)/%.html : $(SRC)/%.html
 	@mkdir -p $(@D)

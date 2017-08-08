@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="../static/font-awesome/css/font-awesome.min.css"/>
-        <link rel="stylesheet" href="popup.css"/>
-    </head>
-    <body>
-        <div id="header" class="textGroup">Janitor</div>
-        <div id="domain" class="textGroup">Let's get to work.</div>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../static/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+    <div id="header" class="textGroup">Janitor</div>
+    <div id="content">
+        <div id="notes" class="textGroup">
+            <strong>Let's get to work.</strong> Right click anywhere and select Janitor -> Delete [Color] to remove the element
+            highlighted and add it to the blacklist for the domain.
+        </div>
+        <div id="domain" class="textGroup"></div>
         <div class="queryList">
-            
+
         </div>
         <div id="prefooter">
             <button id="reset" disabled>Reset All for this Page</button>
         </div>
-        <script src="./popup.js"></script>
-    </body>
+    </div>
+    <script src="./popup.js"></script>
+</body>
+
 </html>
