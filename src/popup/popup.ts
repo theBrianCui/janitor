@@ -67,6 +67,14 @@ namespace Display {
         });
     }
 
+    export function Save(newQueries: Array<string>) {
+        return Storage.setQueriesForDomain(LocalState.activeDomain, newQueries)
+            .then((updatedQueries: Array<string>) => {
+                LocalState.activeQueries = updatedQueries.slice();
+                LocalState.customQueries = updatedQueries.slice();
+            });
+    }
+
     export function HardRefresh() {
         queryList.innerHTML = "";
 
@@ -81,6 +89,13 @@ namespace Display {
             let trash = document.createElement("i");
             trash.setAttribute("class", "fa fa-trash-o fa-fw clickable");
 
+            let wrapper = document.createElement("div");
+            wrapper.appendChild(input);
+            wrapper.appendChild(save);
+            wrapper.appendChild(trash);
+
+            // Update customQueries to reflect user input
+            // Also update trash to undo icon
             input.addEventListener("input", (e) => {
                 LocalState.customQueries[i] = (<HTMLInputElement> e.target).value;
                 if (LocalState.activeQueries[i] !== LocalState.customQueries[i]) {
@@ -92,22 +107,35 @@ namespace Display {
                 }
             });
 
+            // Update activeQueries, as well as what's in Storage
             save.addEventListener("click", (e) => {
                 let newQueries = LocalState.activeQueries;
                 newQueries[i] = LocalState.customQueries[i];
 
-                Storage.setQueriesForDomain(LocalState.activeDomain, newQueries)
-                    .then((newQueries: Array<string>) => {
-                        LocalState.activeQueries = newQueries;
-                        input.dispatchEvent(new Event("input"));
+                Display.Save(newQueries).then(() => {
+                    input.dispatchEvent(new Event("input"));
                 });
             });
 
+            // Delete a query, or undo changes
+            trash.addEventListener("click", (e) => {
+                console.log("Clicked!")
 
-            let wrapper = document.createElement("div");
-            wrapper.appendChild(input);
-            wrapper.appendChild(save);
-            wrapper.appendChild(trash);
+                LocalState.customQueries[i] = (<HTMLInputElement> input).value;
+
+                if (LocalState.activeQueries[i] === LocalState.customQueries[i]) {
+                    LocalState.activeQueries.splice(i, 1);
+                    Display.Save(LocalState.activeQueries).then(() => {
+                        wrapper.remove();
+                    });
+
+                } else {
+                    LocalState.customQueries[i] = LocalState.activeQueries[i];
+                    (<HTMLInputElement> input).value = LocalState.activeQueries[i];
+                    input.dispatchEvent(new Event("input"));
+                    input.focus();
+                }
+            });
 
             queryList.appendChild(wrapper);
         }
