@@ -8,7 +8,8 @@ import Storage from '../lib/StorageProxy';
 var LocalState: IState = {
     activeDomain: "",
     activeQueries: [],
-    customQueries: []
+    customQueries: [],
+    changesPending: false
 }
 
 // Helper namespace for commonly used DOM API functions.
@@ -48,28 +49,34 @@ namespace Display {
     let domain: Element;
     let queryList: Element;
     let resetButton: Element;
+    let statusMessage: Element;
 
     export function Load() {
         domain = document.getElementsByClassName("domain")[0];
         queryList = document.getElementsByClassName("queryList")[0];
-        resetButton = document.getElementById("reset");
+        statusMessage = document.getElementById("status");
+        //resetButton = document.getElementById("reset");
 
         domain.textContent = LocalState.activeDomain;
 
-        resetButton.addEventListener("click", e => {
-            Storage.setQueriesForDomain(LocalState.activeDomain, []).then(
-            (newQueries: Array<string>) => {
-                if (newQueries.length > 0)
-                    throw new Error("Failed to reset queries!");
+        // resetButton.addEventListener("click", e => {
+        //     Storage.setQueriesForDomain(LocalState.activeDomain, []).then(
+        //     (newQueries: Array<string>) => {
+        //         if (newQueries.length > 0)
+        //             throw new Error("Failed to reset queries!");
 
-                return browser.tabs.executeScript({ code: "window.location.reload();" });
-            }).then(Init.Initialize).then(Display.HardRefresh);
-        });
+        //         return browser.tabs.executeScript({ code: "window.location.reload();" });
+        //     }).then(Init.Initialize).then(Display.HardRefresh);
+        // });
     }
 
     export function Save(newQueries: Array<string>) {
         return Storage.setQueriesForDomain(LocalState.activeDomain, newQueries)
             .then((updatedQueries: Array<string>) => {
+                LocalState.changesPending = true;
+                statusMessage.textContent = "Changes pending, reload page to apply";
+                statusMessage.parentElement.setAttribute("class", "green");
+
                 LocalState.activeQueries = updatedQueries.slice();
                 LocalState.customQueries = updatedQueries.slice();
             });
@@ -109,6 +116,9 @@ namespace Display {
 
             // Update activeQueries, as well as what's in Storage
             save.addEventListener("click", (e) => {
+                if (LocalState.activeQueries[i] === LocalState.customQueries[i])
+                    return;
+
                 let newQueries = LocalState.activeQueries;
                 newQueries[i] = LocalState.customQueries[i];
 
@@ -140,7 +150,13 @@ namespace Display {
             queryList.appendChild(wrapper);
         }
 
-        (<HTMLInputElement> resetButton).disabled = LocalState.activeQueries.length === 0; 
+        if (LocalState.changesPending) {
+            statusMessage.textContent = "Changes pending, reload page to apply";
+            statusMessage.parentElement.setAttribute("class", "green");
+        } else if (LocalState.activeQueries.length > 0) {
+            statusMessage.textContent = "Janitor is actively blocking content";
+            statusMessage.parentElement.setAttribute("class", "blue");
+        }
     }
 }
 

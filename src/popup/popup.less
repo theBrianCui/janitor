@@ -1,9 +1,11 @@
 @dark-grey: #424242;
-@pale-white: #f0f0f0;
 @white: #fcfcfc;
 @blue: #007bff;
+.blue { background-color: @blue };
+.light-blue { background-color: lighten(@blue, 20%) };
 @red: #d90000;
 @green: #00c40d;
+.green { background-color: @green; };
 
 @base-font-size: 16px;
 @outer-padding: 12px;
@@ -36,7 +38,7 @@ html, body {
   padding-top: 5px;
   padding-bottom: 5px;
   margin-bottom: @bottom-margin;
-  color: @pale-white;
+  color: @white;
 }
 
 #content {  
@@ -91,5 +93,17 @@ html, body {
       padding-left: 4px;
       margin-right: 5px;
     }
+  }
+}
+
+#footer {
+  font-size: @base-font-size - 2px;
+  text-align: center;
+  .outer-padding;
+  padding-top: 3px;
+  padding-bottom: 3px;
+
+  #status {
+    color: @white;
   }
 }
