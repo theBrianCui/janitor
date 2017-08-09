@@ -1,6 +1,9 @@
 @dark-grey: #424242;
 @pale-white: #f0f0f0;
 @white: #fcfcfc;
+@blue: #007bff;
+@red: #d90000;
+@green: #00c40d;
 
 @base-font-size: 16px;
 @outer-padding: 12px;
@@ -47,7 +50,7 @@ html, body {
     text-align: center;
 
     .domain {
-      background-color: #de3023;
+      background-color: @red;
       display: inline-block;
       color: @white;
       padding: 4px 8px;
@@ -65,6 +68,18 @@ html, body {
     i {
       font-size: 28px;
       max-width: 32px;
+    }
+
+    i.fa-floppy-o:hover {
+      color: @blue;
+    }
+
+    i.fa-trash-o:hover {
+      color: @red;
+    }
+
+    i.fa-undo:hover {
+      color: @green;
     }
 
     input[type=text] {
