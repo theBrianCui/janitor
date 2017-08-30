@@ -3,13 +3,23 @@ The popup (DOM) is re-loaded every single time the user closes and re-opens
 it by clicking the button. There is no expectation to "live update" the
 popup while the user navigates in their browser.
 */
+import { Message } from '../enums';
 import Storage from '../lib/StorageProxy';
+
+interface IState {
+    activeDomain: string,
+    activeQueries: Array<string>,
+    customQueries: Array<string>,
+    changesPending: boolean,
+    removeCount: number
+}
 
 var LocalState: IState = {
     activeDomain: "",
     activeQueries: [],
     customQueries: [],
-    changesPending: false
+    changesPending: false,
+    removeCount: 0
 }
 
 // Helper namespace for commonly used DOM API functions.
@@ -55,31 +65,51 @@ namespace Display {
         domain = document.getElementsByClassName("domain")[0];
         queryList = document.getElementsByClassName("queryList")[0];
         statusMessage = document.getElementById("status");
-        //resetButton = document.getElementById("reset");
-
         domain.textContent = LocalState.activeDomain;
 
-        // resetButton.addEventListener("click", e => {
-        //     Storage.setQueriesForDomain(LocalState.activeDomain, []).then(
-        //     (newQueries: Array<string>) => {
-        //         if (newQueries.length > 0)
-        //             throw new Error("Failed to reset queries!");
+        browser.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
+            if (message.messageType !== Message.removeCount || LocalState.activeDomain !== message.activeDomain) return false;
 
-        //         return browser.tabs.executeScript({ code: "window.location.reload();" });
-        //     }).then(Init.Initialize).then(Display.HardRefresh);
-        // });
+            LocalState.removeCount = message.removeCount;
+            SoftRefresh();
+            return false;
+        });
+
+        return browser.tabs.query({ active: true, currentWindow: true })
+            .then((tabs: Array<any>) => {
+                return browser.tabs.sendMessage(tabs[0].id, 
+                {
+                    messageType: Message.removeCount,
+                    activeDomain: LocalState.activeDomain
+                }
+            ).then((response: any) => {
+                LocalState.removeCount = response ? response.removeCount : 0;
+            })
+        }).catch(console.error);
     }
 
     export function Save(newQueries: Array<string>) {
         return Storage.setQueriesForDomain(LocalState.activeDomain, newQueries)
             .then((updatedQueries: Array<string>) => {
                 LocalState.changesPending = true;
-                statusMessage.textContent = "Changes pending, reload page to apply";
-                statusMessage.parentElement.setAttribute("class", "green");
-
                 LocalState.activeQueries = updatedQueries.slice();
                 LocalState.customQueries = updatedQueries.slice();
+
+                SoftRefresh();
             });
+    }
+
+    function SoftRefresh() {
+        if (LocalState.changesPending) {
+            statusMessage.textContent = "Changes pending, reload page to apply";
+            statusMessage.parentElement.setAttribute("class", "green");
+        } else if (LocalState.removeCount > 0) {
+            statusMessage.textContent = "Janitor is has blocked " + LocalState.removeCount + " page elements";
+            statusMessage.parentElement.setAttribute("class", "blue");
+        } else  {
+            statusMessage.textContent = "No elements currently blocked for this domain";
+            statusMessage.parentElement.setAttribute("class", "light-blue");
+        }
     }
 
     export function HardRefresh() {
@@ -129,8 +159,6 @@ namespace Display {
 
             // Delete a query, or undo changes
             trash.addEventListener("click", (e) => {
-                console.log("Clicked!")
-
                 LocalState.customQueries[i] = (<HTMLInputElement> input).value;
 
                 if (LocalState.activeQueries[i] === LocalState.customQueries[i]) {
@@ -150,27 +178,15 @@ namespace Display {
             queryList.appendChild(wrapper);
         }
 
-        if (LocalState.changesPending) {
-            statusMessage.textContent = "Changes pending, reload page to apply";
-            statusMessage.parentElement.setAttribute("class", "green");
-        } else if (LocalState.activeQueries.length > 0) {
-            statusMessage.textContent = "Janitor is actively blocking content";
-            statusMessage.parentElement.setAttribute("class", "blue");
-        }
+        SoftRefresh();
     }
 }
 
 window.onload = () => {
-    Init.Initialize().then(() => {
-        Display.Load();
-        Display.HardRefresh();
-    }).catch(e => {
-        console.error(e);
+    Init.Initialize()
+        .then(Display.Load)
+        .then(Display.HardRefresh)
+        .catch(e => {
+            console.error(e);
     });
-
-    // browser.storage.onChanged.addListener((changes, areaName) => {
-    //     if (changes[getPageDomain()] && changes[getPageDomain()].newValue !== undefined) {
-    //         assignDisplayQuery(changes[getPageDomain()].newValue);
-    //     }
-    // });
 };

@@ -1,3 +1,4 @@
+import { Message } from '../enums';
 import Storage from '../lib/StorageProxy';
 
 var colors = ["Green", "Blue", "Purple", "Orange"];
@@ -17,6 +18,7 @@ browser.contextMenus.onClicked.addListener((info: any, tab: any) => {
         .then((tabs: Array<any>) => {
             return browser.tabs.sendMessage(tabs[0].id, 
             {
+                messageType: Message.removeDepth,
                 depth: parseInt(info.menuItemId.split("-")[1])
             });
         }).catch(console.error);
